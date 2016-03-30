@@ -5,7 +5,7 @@ Rails.application.require_environment!
 
 class ResqueWorkerDaemon < DaemonSpawn::Base
   def start(args)
-    @worker = Resque::Worker.new('real_mon', 'mailers', 'default')
+    @worker = Resque::Worker.new('APP_NAME', 'mailers', 'default')
     @worker.verbose = true
     @worker.work(5)
   end

@@ -12,13 +12,17 @@ gem 'bcrypt', '~> 3.1.7'
 
 # db schema
 gem 'ridgepole'
-run "wget 
+run "wget -O lib/tasks/ridgepole.rake #{repo_url}/ridgepole.rake"
 
 # db seed
 gem 'seed-fu'
+run 'mkdir -p db/fixtures/{development,production}'
 
 # config
 gem 'config'
+after_bundle do
+  generate 'config:install'
+end
 
 # javascript sugar
 gem 'sugar-rails'
@@ -36,11 +40,8 @@ gem 'redis-rails'
 # rescue
 gem 'resque'
 gem 'resque-scheduler'
-initializer 'resque.rb', <<-CODE
-  Resque.redis = 'localhost:6379'
-  Resque.redis.namespace = "rescue:#{@app_name}:\#\{Rails.env\}"
-  Resque.after_fork = Proc.new { ActiveRecord::Base.establish_connection }
-CODE
+run "wget -O config/initializers/resque.rb #{repo_url}/resque.rb"
+gsub_file 'config/initializers/resque.rb', /APP_NAME/, @app_name
 initializer 'active_job.rb', <<-ACTIVE_JOB
   ActiveJob::Base.queue_adapter = :resque
 ACTIVE_JOB
@@ -50,6 +51,11 @@ gem 'whenever'
 
 # daemon-spawn (for activejob)
 gem 'daemon-spawn', :require => 'daemon_spawn'
+run "wget -O lib/tasks/resque.rake #{repo_url}/resque.rake"
+run "wget -O bin/resque_worker #{repo_url}/resque_worker"
+gsub_file 'bin/resque_worker', /APP_NAME/, @app_name
+run "chmod +x bin/resque_worker"
+run 'mkdir -p tmp/pids'
 
 # jquery cookie
 gem 'jquery-cookie-rails'
@@ -66,6 +72,11 @@ gem 'bootstrap-sass'
 gem 'font-awesome-sass'
 gem 'bootbox-rails'
 gem 'bootstrap-sass-extras'
+
+after_bundle do
+  generate 'bootstrap:install'
+  generate 'bootstrap:layout fluid'
+end
 
 # simple_form
 gem 'simple_form'
@@ -90,6 +101,8 @@ if yes?('Use devise ?')
     model_name = ask('User model name ? [user]')
     model_name = "user" if model_name.blank?
     generate "devise", model_name
+    generate 'devise:views:locale ja'
+    generate 'devise:views:bootstrap_templates'
     generate 'cancan:ability'
   end
 end
@@ -112,7 +125,6 @@ gem_group :development, :test do
   gem 'hirb-unicode'
 
   gem 'quiet_assets'
-  gem 'annotate'
   gem 'tapp'
   gem 'awesome_print'
   gem 'timecop'
@@ -139,6 +151,11 @@ end
 
 after_bundle do
   generate 'rspec:install'
+  file '.rspec', <<-CODE
+    --color
+    -fd
+    --require spec_helper
+  CODE
 end
 
 gem_group :test do
@@ -150,6 +167,7 @@ end
 gem_group :production do
   gem 'pg'
 end
+run "wget -O config/database.yml #{repo_url}/database.yml"
 
 # jasmine install
 if yes?('Use jasmine ?')
@@ -162,6 +180,10 @@ if yes?('Use jasmine ?')
   after_bundle do
     generate 'jasmine_rails:install'
   end
+end
+
+after_bundle do
+  rake 'haml:replace_erbs'
 end
 
 # remove
@@ -182,4 +204,42 @@ run "wget -O app/assets/javascripts/application.js #{repo_url}/application.js"
 # application.sass
 run 'rm app/assets/stylesheets/application.css'
 run "wget -O app/assets/stylesheets/application.sass #{repo_url}/application.sass"
+
+# locales
+run "wget -O config/locales/ja.yml https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml"
+
+# environment
+application do
+  config.time_zone = 'Tokyo'
+  config.active_record.default_timezone = :local
+  config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml,yaml}')]
+  config.i18n.default_locale = :ja
+  config.autoload_paths += Dir["#{config.root}/lib"]
+end
+
+environment env: 'development' do
+  config.action_controller.action_on_unpermitted_parameters = :raise
+  config.rack_dev_mark.enable = true
+  config.web_console.whitelisted_ips = '172.30.244.1'
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = true
+    Bullet.bullet_logger = true
+    Bullet.console = true
+    Bullet.rails_logger = true
+  end
+  config.logger = Logger.new('log/development.log', 5, 10 * 1024 * 1024)
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: '', 
+    domain: '', 
+    enable_startttls_auto: false
+  }
+end
+
+environment env: 'production' do
+  config.cache_store = :redis_store, 'redis://localhost:6379/0'
+  config.logger = Logger.new('log/production.log', 5, 20 * 1024 * 1024)
+end
 
