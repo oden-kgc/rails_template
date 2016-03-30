@@ -1,0 +1,34 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../../config/application', __FILE__)
+Rails.application.require_environment!
+
+class ResqueWorkerDaemon < DaemonSpawn::Base
+  def start(args)
+    @worker = Resque::Worker.new('real_mon', 'mailers', 'default')
+    @worker.verbose = true
+    @worker.work(5)
+  end
+
+  def stop
+    @worker.try(:shutdown)
+  end
+end
+
+LOG_FNAME = 'resque_worker.log'
+
+log_base = File.join(Rails.root, 'log')
+log_file = File.join(log_base, LOG_FNAME)
+if File.exist?(log_file) then
+  File.delete(log_file)
+end
+
+ResqueWorkerDaemon.spawn!({
+  working_dir: Rails.root, 
+  pid_file: File.join(Rails.root, 'tmp', 'pids', 'resque_worker.pid'), 
+  log_file: log_file, 
+  sync_log: true, 
+  singleton: true, 
+  processes: 2
+})
+
