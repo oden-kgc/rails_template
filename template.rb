@@ -228,6 +228,13 @@ after_bundle do
   # locales
   get "https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml", 'config/locales/ja.yml'
 
+  # jquery.readyselector
+  get 'https://raw.githubusercontent.com/Verba/jquery-readyselector/master/jquery.readyselector.js', 'vendor/assets/javascripts/jquery.readyselector.js'
+
+  # factory_girl
+  uncomment_lines 'spec/rails_helper.rb', /Dir\[Rails\.root\.join/
+  get "#{repo_url}/factory_girl.rb", 'spec/support/factory_girl.rb'
+
   # environment
   application do
     %Q{
