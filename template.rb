@@ -195,6 +195,7 @@ after_bundle do
   run 'mkdir -p tmp/pids'
 
   # database
+  run 'rm config/database.yml'
   get "#{repo_url}/database.yml", 'config/database.yml'
 
   # remove
@@ -209,6 +210,7 @@ after_bundle do
   get "#{repo_url}/pryrc", '.pryrc'
 
   # .rspec
+  run 'rm .rspec'
   file '.rspec', <<-CODE
     --color
     -fd
