@@ -249,6 +249,7 @@ after_bundle do
 
   environment(nil, env: 'development') do
     %Q{
+    config.cache_store = :redis_store, 'redis://localhost:6379/9'
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.web_console.whitelisted_ips = '172.30.244.1'
     config.after_initialize do
