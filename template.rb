@@ -178,7 +178,8 @@ after_bundle do
   get "#{repo_url}/ridgepole.rake", 'lib/tasks/ridgepole.rake'
 
   # seed_fu
-  run 'mkdir -p db/fixtures/{development,production}'
+  run 'mkdir -p db/fixtures/development'
+  run 'mkdir -p db/fixtures/production'
 
   # resque
   get "#{repo_url}/resque.rb", 'config/initializers/resque.rb'
