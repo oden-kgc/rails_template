@@ -158,7 +158,7 @@ after_bundle do
   # generate
   run "#{GEN} config:install"
   run "#{GEN} bootstrap:install"
-  run "#{GEN} bootstrap:layout fluid"
+  run "#{GEN} bootstrap:layout application fluid"
   run "#{GEN} simple_form:install --bootstrap"
 
   if has_devise then
