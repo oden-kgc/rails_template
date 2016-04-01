@@ -176,6 +176,7 @@ after_bundle do
 
   # ridgepole
   get "#{repo_url}/ridgepole.rake", 'lib/tasks/ridgepole.rake'
+  run 'touch db/Schemafile'
 
   # seed_fu
   run 'mkdir -p db/fixtures/development'
