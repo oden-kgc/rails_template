@@ -76,9 +76,6 @@ gem 'whenever'
 # daemon-spawn (for activejob)
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
-# jquery cookie
-gem 'jquery-cookie-rails'
-
 # confirm bootstrap dialog
 gem 'data-confirm-modal', git: 'https://github.com/ifad/data-confirm-modal'
 
@@ -97,6 +94,10 @@ gem 'kaminari'
 
 uncomment_lines 'Gemfile', 'therubyracer'
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
+comment_lines 'Gemfile', /gem 'listen'/
+comment_lines 'Gemfile', /web-console/
+
+gem 'listen', '~> 3.0.5'
 
 gem_group :development, :test do
   gem 'pry'
@@ -110,13 +111,12 @@ gem_group :development, :test do
   gem 'hirb'
   gem 'hirb-unicode'
 
-  gem 'quiet_assets'
   gem 'tapp'
   gem 'awesome_print'
   gem 'timecop'
   gem 'colorize_unpermitted_parameters'
   gem 'rack-mini-profiler'
-  gem 'xray-rails'
+  #gem 'xray-rails', git: 'https://github.com/brentd/xray-rails.git'
 
   gem 'rspec'
   gem 'rspec-rails'
