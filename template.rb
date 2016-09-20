@@ -45,7 +45,7 @@ if yes?('Use jasmine ?')
 end
 
 # db schema
-gem 'ridgepole', github: 'winebarrel/ridgepole', branch: 'v0.6.5'
+gem 'ridgepole', git: 'https://github.com/winebarrel/ridgepole', branch: 'v0.6.5'
 
 # db seed
 gem 'seed-fu'
@@ -80,7 +80,7 @@ gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'jquery-cookie-rails'
 
 # confirm bootstrap dialog
-gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
+gem 'data-confirm-modal', git: 'https://github.com/ifad/data-confirm-modal'
 
 # haml
 gem 'haml-rails'
