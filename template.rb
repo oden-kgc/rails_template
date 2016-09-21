@@ -92,6 +92,9 @@ gem 'bootstrap-sass-extras'
 # pagination
 gem 'kaminari'
 
+# js cookie
+gem 'js_cookie_rails'
+
 uncomment_lines 'Gemfile', 'therubyracer'
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
 comment_lines 'Gemfile', /gem 'listen'/
