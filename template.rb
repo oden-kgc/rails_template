@@ -262,7 +262,7 @@ after_bundle do
       Bullet.console = true
       Bullet.rails_logger = true
     end
-    config.logger = Logger.new('log/development.log', 5, 10 * 1024 * 1024)
+    config.logger = ActiveSupport::Logger.new('log/development.log', 5, 10 * 1024 * 1024)
     config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
@@ -276,7 +276,7 @@ after_bundle do
   environment(nil, env: 'production') do
     %Q{
     config.cache_store = :redis_store, 'redis://localhost:6379/0'
-    config.logger = Logger.new('log/production.log', 5, 20 * 1024 * 1024)
+    config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20 * 1024 * 1024)
     }
   end
 
