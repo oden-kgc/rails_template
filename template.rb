@@ -156,7 +156,7 @@ after_bundle do
   run "#{GEN} rspec:install"
 
   # rack-dev-mark
-  run "#{GEN} rack:dev-mark:install"
+  #run "#{GEN} rack:dev-mark:install"
 
   # generate
   run "#{GEN} config:install"
@@ -253,6 +253,7 @@ after_bundle do
 
   environment(nil, env: 'development') do
     %Q{
+    config.rack_dev_mark.enable = true
     config.cache_store = :redis_store, 'redis://localhost:6379/9'
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.after_initialize do
@@ -276,7 +277,7 @@ after_bundle do
   environment(nil, env: 'production') do
     %Q{
     config.cache_store = :redis_store, 'redis://localhost:6379/0'
-    config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20 * 1024 * 1024)
+    config.logger = ActiveSupport::Logger.new('log/production.log', 10, 20 * 1024 * 1024)
     }
   end
 
