@@ -1,15 +1,16 @@
 begin
   require 'hirb'
 rescue LoadError
+  puts 'No hirb!'
 end
 
-if defined?(Hirb) then
+if defined?(Hirb)
   Hirb::View.instance_eval do
     def enable_output_method
       @output_method = true
       @old_print = Pry.config.print
-      Pry.config.print = proc do |output, value, _pry_|
-        Hirb::View.view_or_page_output(value) || @old_print.call(output, value, _pry_)
+      Pry.config.print = proc do |*args|
+        Hirb::View.view_or_page_output(args[1]) || @old_print.call(*args)
       end
     end
 
@@ -20,5 +21,14 @@ if defined?(Hirb) then
   end
 
   Hirb.enable
+end
+
+begin
+  require 'awesome_print'
+  Pry.config.print = proc do |*args|
+    args[0].puts args[1].ai
+  end
+rescue LoadError
+  puts 'No awesome_print !'
 end
 
