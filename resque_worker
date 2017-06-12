@@ -23,12 +23,21 @@ if File.exist?(log_file) then
   File.delete(log_file)
 end
 
+require 'fileutils'
+
+pid_base = File.join(Rails.root, 'tmp', 'pids')
+unless File.exist?(pid_base)
+  FileUtils.mkdir_p(pid_base)
+end
+pid_path = File.join(pid_base, 'resque_worker.pid')
+
 ResqueWorkerDaemon.spawn!({
   working_dir: Rails.root, 
-  pid_file: File.join(Rails.root, 'tmp', 'pids', 'resque_worker.pid'), 
+  pid_file: pid_path, 
   log_file: log_file, 
   sync_log: true, 
   singleton: true, 
-  processes: 2
+  signal: :QUIT, 
+  processes: 5
 })
 
