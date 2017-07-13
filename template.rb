@@ -56,8 +56,8 @@ gem 'config'
 # javascript sugar
 gem 'sugar-rails'
 
-# jquery & turbolinks
-gem 'jquery-turbolinks'
+# jquery
+gem 'jquery-rails'
 
 # jquery ui
 gem 'jquery-ui-rails'
@@ -90,17 +90,13 @@ gem 'bootbox-rails'
 gem 'bootstrap-sass-extras'
 
 # pagination
-gem 'kaminari'
+#gem 'kaminari'
 
 # js cookie
 gem 'js_cookie_rails'
 
 uncomment_lines 'Gemfile', 'therubyracer'
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
-comment_lines 'Gemfile', /gem 'listen'/
-comment_lines 'Gemfile', /web-console/
-
-gem 'listen', '~> 3.0.5'
 
 gem_group :development, :test do
   gem 'pry'
@@ -119,7 +115,6 @@ gem_group :development, :test do
   gem 'timecop'
   gem 'colorize_unpermitted_parameters'
   gem 'rack-mini-profiler'
-  #gem 'xray-rails', git: 'https://github.com/brentd/xray-rails.git'
 
   gem 'rspec'
   gem 'rspec-rails'
@@ -139,7 +134,6 @@ gem_group :development, :test do
 end
 
 gem_group :test do
-  gem 'capybara'
   gem 'poltergeist'
   gem 'database_cleaner'
 end
@@ -154,9 +148,6 @@ GEN = 'bundle exec rails g '
 after_bundle do
   # rspec
   run "#{GEN} rspec:install"
-
-  # rack-dev-mark
-  run "#{GEN} rack:dev-mark:install"
 
   # generate
   run "#{GEN} config:install"
@@ -233,9 +224,6 @@ after_bundle do
   # locales
   get "https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml", 'config/locales/ja.yml'
 
-  # jquery.readyselector
-  get 'https://raw.githubusercontent.com/Verba/jquery-readyselector/master/jquery.readyselector.js', 'vendor/assets/javascripts/jquery.readyselector.js'
-
   # factory_girl
   uncomment_lines 'spec/rails_helper.rb', /Dir\[Rails\.root\.join/
   get "#{repo_url}/factory_girl.rb", 'spec/support/factory_girl.rb'
@@ -253,6 +241,7 @@ after_bundle do
 
   environment(nil, env: 'development') do
     %Q{
+    config.rack_dev_mark.enable = true
     config.cache_store = :redis_store, 'redis://localhost:6379/9'
     config.action_controller.action_on_unpermitted_parameters = :raise
     config.after_initialize do
@@ -276,7 +265,7 @@ after_bundle do
   environment(nil, env: 'production') do
     %Q{
     config.cache_store = :redis_store, 'redis://localhost:6379/0'
-    config.logger = ActiveSupport::Logger.new('log/production.log', 5, 20 * 1024 * 1024)
+    config.logger = ActiveSupport::Logger.new('log/production.log', 10, 20 * 1024 * 1024)
     }
   end
 
