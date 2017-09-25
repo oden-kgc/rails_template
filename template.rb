@@ -147,6 +147,9 @@ bundle_command('install --path=vendor/bundle')
 
 GEN = 'bundle exec rails g '
 after_bundle do
+  # rspec
+  run "#{GEN} rspec:install"
+
   # generate
   run "#{GEN} config:install"
   run "#{GEN} bootstrap:install"
@@ -164,7 +167,6 @@ after_bundle do
   if has_jasmine then
     run "#{GEN} jasmine_rails:install"
   end
-
 
   # ridgepole
   get "#{repo_url}/ridgepole.rake", 'lib/tasks/ridgepole.rake'
@@ -268,9 +270,6 @@ after_bundle do
   end
 
   run 'bundle exec rake haml:replace_erbs'
-
-  # rspec
-  run "#{GEN} rspec:install"
 
   git :init
   git add: '.'
