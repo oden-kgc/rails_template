@@ -45,7 +45,8 @@ if yes?('Use jasmine ?')
 end
 
 # db schema
-gem 'ridgepole', git: 'https://github.com/winebarrel/ridgepole', branch: '0.7'
+#gem 'ridgepole', git: 'https://github.com/winebarrel/ridgepole', branch: '0.7'
+gem 'ridgepole'
 
 # db seed
 gem 'seed-fu'
