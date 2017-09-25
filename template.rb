@@ -196,6 +196,7 @@ after_bundle do
 
   # remove
   run 'rm README.rdoc'
+  run 'rm README.md'
   run 'rm -rf test/'
 
   # .gitignore
