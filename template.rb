@@ -78,7 +78,8 @@ gem 'whenever'
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
 # confirm bootstrap dialog
-gem 'data-confirm-modal', git: 'https://github.com/ifad/data-confirm-modal'
+#gem 'data-confirm-modal', git: 'https://github.com/ifad/data-confirm-modal'
+gem 'data-confirm-modal'
 
 # haml
 gem 'haml-rails'
