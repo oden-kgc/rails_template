@@ -104,6 +104,8 @@ gem_group :production do
   gem 'pg'
 end
 
+gem 'webpacker'
+
 bundle_command('install --path=vendor/bundle')
 
 GEN = 'bundle exec rails g '
@@ -245,9 +247,9 @@ after_bundle do
   run "echo 'webpacker: bin/webpack-dev-server' >> Procfile"
 
   # webpacker install
-  run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:vue'
-  run 'bundle exec rails webpacker:install:coffeescript'
+  run 'bin/rails webpacker:install'
+  run 'bin/rails webpacker:install:vue'
+  run 'bin/rails webpacker:install:coffeescript'
 
   git :init
   git add: '.'
