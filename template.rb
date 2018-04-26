@@ -248,8 +248,8 @@ after_bundle do
   run 'bin/rails webpacker:install:coffee'
   gsub_file 'config/webpacker.yml', /localhost/, '0.0.0.0'
 
-  git :init
   git add: '.'
+  git reset: "HEAD db/migrate/*"
   git commit: "-m 'first commit'"
 
 end
