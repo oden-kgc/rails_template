@@ -245,9 +245,9 @@ after_bundle do
   run "echo 'webpacker: bin/webpack-dev-server' >> Procfile"
 
   # webpacker install
-  run 'bin/rails webpacker:install'
-  run 'bin/rails webpacker:install:vue'
-  run 'bin/rails webpacker:install:coffeescript'
+  #run 'bin/rails webpacker:install'
+  #run 'bin/rails webpacker:install:vue'
+  run 'bin/rails webpacker:install:coffee'
 
   git :init
   git add: '.'
