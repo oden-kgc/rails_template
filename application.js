@@ -12,8 +12,4 @@
 //
 //= require rails-ujs
 //= require turbolinks
-//= require bootstrap-sprockets
-//= require bootbox
-//= require sugar
-//= require data-confirm-modal
 //= require_tree .

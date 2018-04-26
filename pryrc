@@ -23,12 +23,3 @@ if defined?(Hirb)
   Hirb.enable
 end
 
-begin
-  require 'awesome_print'
-  Pry.config.print = proc do |*args|
-    args[0].puts args[1].ai
-  end
-rescue LoadError
-  puts 'No awesome_print !'
-end
-

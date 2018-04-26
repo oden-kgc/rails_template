@@ -8,6 +8,8 @@ repo_url = 'https://raw.githubusercontent.com/oden-kgc/rails_template/master'
 # Gemfile
 #
 
+gem 'action_args'
+
 # simple_form
 gem 'simple_form'
 if yes?('Use nested_form ?')
@@ -25,23 +27,12 @@ if yes?('Use devise ?')
   gem 'devise-bootstrap-views'
   gem 'devise-i18n'
   gem 'devise-i18n-views'
-  gem 'cancancan'
+  gem 'pundit'
 end
 
 # feature phone
 if yes?('Use feature phone ?')
   gem 'jpmobile'
-end
-
-# jasmine install
-has_jasmine = false
-if yes?('Use jasmine ?')
-  has_jasmine = true
-  gem_group :development, :test do
-    gem 'phantomjs'
-    gem 'jasmine-rails'
-    gem 'jasmine-jquery-rails'
-  end
 end
 
 # db schema
@@ -54,18 +45,11 @@ gem 'seed-fu'
 # config
 gem 'config'
 
-# javascript sugar
-gem 'sugar-rails'
-
-# jquery
-gem 'jquery-rails'
-
-# jquery ui
-gem 'jquery-ui-rails'
-
 # for Redis
 gem 'redis'
 gem 'redis-rails'
+gem 'redis-mutex'
+gem 'redis-namespace'
 
 # rescue
 gem 'resque'
@@ -77,27 +61,12 @@ gem 'whenever'
 # daemon-spawn (for activejob)
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
-# confirm bootstrap dialog
-#gem 'data-confirm-modal', git: 'https://github.com/ifad/data-confirm-modal'
-gem 'data-confirm-modal'
-
 # haml
 gem 'haml-rails'
 
-# bootstrap
-gem 'autoprefixer-rails'
-gem 'bootstrap-sass'
-gem 'font-awesome-sass'
-gem 'bootbox-rails'
-gem 'bootstrap-sass-extras'
+# foreman
+gem 'foreman'
 
-# pagination
-#gem 'kaminari'
-
-# js cookie
-gem 'js_cookie_rails'
-
-uncomment_lines 'Gemfile', 'therubyracer'
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
 
 gem_group :development, :test do
@@ -110,19 +79,16 @@ gem_group :development, :test do
   gem 'binding_of_caller'
 
   gem 'hirb'
-  gem 'hirb-unicode'
 
   gem 'tapp'
-  gem 'awesome_print'
   gem 'timecop'
   gem 'colorize_unpermitted_parameters'
   gem 'rack-mini-profiler'
 
   gem 'rspec'
   gem 'rspec-rails'
-  gem 'guard-rspec', require: false
   gem 'spring-commands-rspec'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'faker-japanese'
 
@@ -133,11 +99,6 @@ gem_group :development, :test do
 
   gem 'erb2haml'
   gem 'rails-footnotes'
-end
-
-gem_group :test do
-  gem 'poltergeist'
-  gem 'database_cleaner'
 end
 
 gem_group :production do
@@ -153,8 +114,6 @@ after_bundle do
 
   # generate
   run "#{GEN} config:install"
-  run "#{GEN} bootstrap:install"
-  run "#{GEN} bootstrap:layout application fluid"
   run "#{GEN} simple_form:install --bootstrap"
 
   if has_devise then
@@ -162,11 +121,7 @@ after_bundle do
     run "#{GEN} devise #{model_name}"
     run "#{GEN} devise:views:locale ja"
     run "#{GEN} devise:views:bootstrap_templates"
-    run "#{GEN} cancan:ability"
-  end
-
-  if has_jasmine then
-    run "#{GEN} jasmine_rails:install"
+    run "#{GEN} pundit:install"
   end
 
   # ridgepole
@@ -226,9 +181,9 @@ after_bundle do
   # locales
   get "https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml", 'config/locales/ja.yml'
 
-  # factory_girl
+  # factory_bot
   uncomment_lines 'spec/rails_helper.rb', /Dir\[Rails\.root\.join/
-  get "#{repo_url}/factory_girl.rb", 'spec/support/factory_girl.rb'
+  get "#{repo_url}/factory_bot.rb", 'spec/support/factory_bot.rb'
 
   # environment
   application do
@@ -238,6 +193,19 @@ after_bundle do
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml,yaml}')]
     config.i18n.default_locale = :ja
     config.autoload_paths += Dir["\#\{config.root\}/lib"]
+    config.generators do |g|
+      g.orm :active_record
+      g.template_engine :haml
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_bot, dir: "spec/factories"
+      g.view_specs false
+      g.controller_specs true
+      g.routing_specs false
+      g.helper_specs false
+      g.requiest_specs false
+      g.assets false
+      g.helper false
+    end
     }
   end
 
@@ -249,7 +217,6 @@ after_bundle do
     config.after_initialize do
       Bullet.enable = true
       Bullet.alert = true
-      Bullet.bullet_logger = true
       Bullet.console = true
       Bullet.rails_logger = true
     end
@@ -271,7 +238,17 @@ after_bundle do
     }
   end
 
-  run 'bundle exec rake haml:replace_erbs'
+  # erb -> haml
+  run 'bundle exec rails haml:replace_erbs'
+
+  # Procfile
+  run "echo 'web: bundle exec bin/rails s -b 0.0.0.0' > Procfile"
+  run "echo 'webpacker: bin/webpack-dev-server' >> Procfile"
+
+  # webpacker install
+  run 'bundle exec rails webpacker:install'
+  run 'bundle exec rails webpacker:install:vue'
+  run 'bundle exec rails webpacker:install:coffeescript'
 
   git :init
   git add: '.'
