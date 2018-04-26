@@ -104,8 +104,6 @@ gem_group :production do
   gem 'pg'
 end
 
-gem 'webpacker'
-
 bundle_command('install --path=vendor/bundle')
 
 GEN = 'bundle exec rails g '
