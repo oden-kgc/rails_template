@@ -98,7 +98,6 @@ gem_group :development, :test do
   gem 'bullet'
 
   gem 'erb2haml'
-  gem 'rails-footnotes'
 end
 
 gem_group :production do
