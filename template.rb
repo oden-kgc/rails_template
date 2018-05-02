@@ -101,7 +101,6 @@ gem_group :development, :test do
   gem 'bullet'
 
   gem 'erb2haml'
-  gem 'rails-footnotes'
 end
 
 gem_group :production do
@@ -248,14 +247,15 @@ after_bundle do
   run 'bundle exec rails haml:replace_erbs'
 
   # Procfile
-  run "echo 'web: bundle exec bin/rails s -b 0.0.0.0' > Procfile"
+  run "echo 'web: bin/rails s -b 0.0.0.0' > Procfile"
   run "echo 'webpacker: bin/webpack-dev-server' >> Procfile"
 
   # webpacker install
   run 'bundle exec rails webpacker:install'
+  gsub_file 'config/webpacker.yml', /localhost/, '0.0.0.0'
 
-  git :init
   git add: '.'
+  git reset: "HEAD db/migrate/*"
   git commit: "-m 'first commit'"
 
 end
