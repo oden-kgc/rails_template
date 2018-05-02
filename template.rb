@@ -67,6 +67,9 @@ gem 'haml-rails'
 # foreman
 gem 'foreman'
 
+# opal
+gem 'opal-rails'
+
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
 
 gem_group :development, :test do
@@ -172,7 +175,7 @@ after_bundle do
 
   # application.js
   run 'rm app/assets/javascripts/application.js'
-  get "#{repo_url}/application.js", 'app/assets/javascripts/application.js'
+  get "#{repo_url}/application.js.rb", 'app/assets/javascripts/application.js.rb'
 
   # application.sass
   run 'rm app/assets/stylesheets/application.css'
@@ -228,6 +231,9 @@ after_bundle do
       domain: '', 
       enable_startttls_auto: false
     }
+    config.web_console.whitelisted_ips = '0.0.0.0/0'
+
+    config.webpacker.check_yarn_integrity = false
     }
   end
 
@@ -247,8 +253,6 @@ after_bundle do
 
   # webpacker install
   run 'bundle exec rails webpacker:install'
-  run 'bundle exec rails webpacker:install:vue'
-  run 'bundle exec rails webpacker:install:coffeescript'
 
   git :init
   git add: '.'
