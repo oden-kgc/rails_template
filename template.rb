@@ -68,7 +68,11 @@ gem 'haml-rails'
 gem 'foreman'
 
 # opal
-gem 'opal-rails'
+use_opal = false
+if yes?('Use Opal ?')
+  use_opal = true
+  gem 'opal-rails'
+end
 
 uncomment_lines 'Gemfile', 'bcrypt' if has_devise
 
@@ -173,8 +177,10 @@ after_bundle do
   CODE
 
   # application.js
-  run 'rm app/assets/javascripts/application.js'
-  get "#{repo_url}/application.js.rb", 'app/assets/javascripts/application.js.rb'
+  if use_opal
+    run 'rm app/assets/javascripts/application.js'
+    get "#{repo_url}/application.js.rb", 'app/assets/javascripts/application.js.rb'
+  end
 
   # application.sass
   run 'rm app/assets/stylesheets/application.css'
@@ -205,8 +211,8 @@ after_bundle do
       g.routing_specs false
       g.helper_specs false
       g.requiest_specs false
-      g.assets false
-      g.helper false
+      #g.assets false
+      #g.helper false
     end
     }
   end
