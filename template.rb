@@ -40,8 +40,7 @@ gem 'redis-mutex'
 gem 'resque'
 gem 'whenever'
 gem 'daemon-spawn', :require => 'daemon_spawn'
-
-uncomment_lines 'Gemfile', 'sassc-rails'
+gem 'sassc-rails'
 
 bundle_command('install --path=vendor/bundle')
 
