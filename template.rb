@@ -28,6 +28,7 @@ if yes?('Use devise ?')
   gem 'pundit'
 end
 
+gem 'pg'
 gem 'haml-rails'
 gem 'ridgepole'
 gem 'seed-fu'
@@ -40,8 +41,7 @@ gem 'whenever'
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
 uncomment_lines 'Gemfile', 'sassc-rails'
-
-gem 'pg'
+uncomment_lines 'Gemfile', 'redis'
 
 bundle_command('install --path=vendor/bundle')
 
