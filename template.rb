@@ -35,13 +35,13 @@ gem 'seed-fu'
 gem 'config'
 gem 'draper'
 
+gem 'redis'
 gem 'redis-mutex'
 gem 'resque'
 gem 'whenever'
 gem 'daemon-spawn', :require => 'daemon_spawn'
 
 uncomment_lines 'Gemfile', 'sassc-rails'
-uncomment_lines 'Gemfile', 'redis'
 
 bundle_command('install --path=vendor/bundle')
 
