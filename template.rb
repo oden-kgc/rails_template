@@ -119,7 +119,7 @@ after_bundle do
   # erb -> haml
   run 'bundle exec rails haml:erb2haml'
 
-  run 'bundle exec rails draper:install'
+  run "#{GEN} draper:install"
 
   run 'bundle exec rails javascript:install:esbuild'
   run 'bundle exec rails css:install:bootstrap'
