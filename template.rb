@@ -12,11 +12,8 @@ gem 'action_args'
 
 # simple_form
 gem 'simple_form'
-if yes?('Use nested_form ?')
-  gem 'nested_form'
-end
 
-# devise & cancan
+# devise & pundit
 has_devise = false
 model_name = 'user'
 if yes?('Use devise ?')
@@ -28,7 +25,6 @@ if yes?('Use devise ?')
   gem 'pundit'
 end
 
-gem 'pg'
 gem 'haml-rails'
 gem 'ridgepole'
 gem 'seed-fu'
