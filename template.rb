@@ -31,7 +31,6 @@ gem 'seed-fu'
 gem 'config'
 gem 'draper'
 
-gem 'redis'
 gem 'redis-mutex'
 gem 'resque'
 gem 'whenever'
