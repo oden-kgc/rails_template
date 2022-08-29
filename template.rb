@@ -8,7 +8,7 @@ repo_url = 'https://raw.githubusercontent.com/oden-kgc/rails_template/master'
 # Gemfile
 #
 
-gem 'action_args'
+#gem 'action_args'
 
 # simple_form
 gem 'simple_form'
