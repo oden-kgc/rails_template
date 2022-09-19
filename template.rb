@@ -22,6 +22,7 @@ if yes?('Use devise ?')
   model_name = "user" if model_name.blank?
   gem 'devise'
   gem 'devise-i18n'
+  gem 'devise-bootstrap5'
   gem 'pundit'
 end
 
@@ -48,8 +49,8 @@ after_bundle do
   if has_devise then
     run "#{GEN} devise:install"
     run "#{GEN} devise #{model_name}"
-    run "#{GEN} devise:views:locale ja"
-    run "#{GEN} devise:views:bootstrap_templates"
+    run "#{GEN} devise:i18n:locale ja"
+    run "#{GEN} devise:views:bootstrap
     run "#{GEN} pundit:install"
   end
 
