@@ -50,7 +50,7 @@ after_bundle do
     run "#{GEN} devise:install"
     run "#{GEN} devise #{model_name}"
     run "#{GEN} devise:i18n:locale ja"
-    run "#{GEN} devise:views:bootstrap
+    run "#{GEN} devise:views:bootstrap"
     run "#{GEN} pundit:install"
   end
 
