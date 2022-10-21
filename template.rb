@@ -88,6 +88,8 @@ after_bundle do
   end
 
   if has_sidekiq
+    get "#{repo_url}/sidekiq.eb", 'config/initializers/sidekiq.rb'
+    get "#{repo_url}/sidekiq.yml", 'config/sidekiq.yml'
   end
 
   # remove
@@ -110,6 +112,16 @@ after_bundle do
     config.active_model.i18n_customize_full_message = true
     config.log_formatter = ::Logger::Formatter.new
     }
+    if has_resque
+      %Q{
+      config.active_job.queue_adapter = :resque
+      }
+    end
+    if has_sidekiq
+      %Q{
+      config.active_job.queue_adapter = :sidekiq
+      }
+    end
   end
 
   environment(nil, env: 'development') do
