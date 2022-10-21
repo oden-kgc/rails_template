@@ -26,6 +26,20 @@ if yes?('Use devise ?')
   gem 'pundit'
 end
 
+# job queue
+has_resque = false
+has_sidekiq = false
+if yes?('User Resque ?')
+  has_resque = true
+  gem 'resque'
+  gem 'daemon-spawn', :require => 'daemon_spawn'
+else
+  if yes?('Use Sidekiq ?')
+    has_sidekiq = true
+    gem 'sidekiq'
+  end
+end
+
 gem 'haml-rails', '< 2.1'
 gem 'ridgepole'
 gem 'seed-fu'
@@ -33,9 +47,7 @@ gem 'config'
 gem 'draper'
 
 gem 'redis-mutex'
-gem 'resque'
 gem 'whenever'
-gem 'daemon-spawn', :require => 'daemon_spawn'
 gem 'sassc-rails'
 
 bundle_command('install --path=vendor/bundle')
@@ -62,16 +74,21 @@ after_bundle do
   run 'mkdir -p db/fixtures/development'
   run 'mkdir -p db/fixtures/production'
 
-  # resque
-  get "#{repo_url}/resque.rb", 'config/initializers/resque.rb'
-  gsub_file 'config/initializers/resque.rb', /APP_NAME/, @app_name
+  if has_resque
+    # resque
+    get "#{repo_url}/resque.rb", 'config/initializers/resque.rb'
+    gsub_file 'config/initializers/resque.rb', /APP_NAME/, @app_name
 
-  # daemon_spawn
-  get "#{repo_url}/resque.rake", 'lib/tasks/resque.rake'
-  get "#{repo_url}/resque_worker", 'bin/resque_worker'
-  gsub_file 'bin/resque_worker', /APP_NAME/, @app_name
-  run "chmod +x bin/resque_worker"
-  run 'mkdir -p tmp/pids'
+    # daemon_spawn
+    get "#{repo_url}/resque.rake", 'lib/tasks/resque.rake'
+    get "#{repo_url}/resque_worker", 'bin/resque_worker'
+    gsub_file 'bin/resque_worker', /APP_NAME/, @app_name
+    run "chmod +x bin/resque_worker"
+    run 'mkdir -p tmp/pids'
+  end
+
+  if has_sidekiq
+  end
 
   # remove
   run 'rm README.md'
