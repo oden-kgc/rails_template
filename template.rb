@@ -88,7 +88,7 @@ after_bundle do
   end
 
   if has_sidekiq
-    get "#{repo_url}/sidekiq.eb", 'config/initializers/sidekiq.rb'
+    get "#{repo_url}/sidekiq.rb", 'config/initializers/sidekiq.rb'
     get "#{repo_url}/sidekiq.yml", 'config/sidekiq.yml'
   end
 
