@@ -26,7 +26,7 @@ if yes?('Use devise ?')
   gem 'pundit'
 end
 
-gem 'haml-rails'
+gem 'haml-rails', '< 2.1'
 gem 'ridgepole'
 gem 'seed-fu'
 gem 'config'
