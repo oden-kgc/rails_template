@@ -90,6 +90,7 @@ after_bundle do
   if has_sidekiq
     get "#{repo_url}/sidekiq.rb", 'config/initializers/sidekiq.rb'
     get "#{repo_url}/sidekiq.yml", 'config/sidekiq.yml'
+    get "#{repo_url}/sidekiq.service", 'lib/templates/systemd/sidekiq.service'
   end
 
   # remove

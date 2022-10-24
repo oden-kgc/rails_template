@@ -1,0 +1,21 @@
+[Unit]
+Description=sidekiq
+After=syslog.target network.target
+
+[Service]
+Type=notify
+WatchdogSec=10
+
+WorkingDirectory=/path/to/your/app/current
+ExecStart=/bin/bash -lc 'exec /opt/rbenv/shims/bundle exec sidekiq -e production'
+ExecReload=/usr/bin/kill -TSTP $MAINPID
+Environment=MALLOC_ARENA_MAX=2
+RestartSec=1
+Restart=on-failure
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=sidekiq
+
+[Install]
+WantedBy=default.target
+
