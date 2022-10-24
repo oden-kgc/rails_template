@@ -135,6 +135,8 @@ after_bundle do
 
     config.logger = ActiveSupport::Logger.new('log/development.log', 5, 10 * 1024 * 1024)
     config.logger.formatter = config.log_formatter
+    config.hosts.clear
+    config.web_console.allowed_ips = '0.0.0.0/0'
     }
   end
 
