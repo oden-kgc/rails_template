@@ -105,7 +105,7 @@ after_bundle do
 
   # environment
   application do
-    %Q{
+    base = %Q{
     config.time_zone = 'Tokyo'
     config.active_record.default_timezone = :local
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
@@ -115,11 +115,13 @@ after_bundle do
     }
     if has_resque
       %Q{
+      #{base}
       config.active_job.queue_adapter = :resque
       }
     end
     if has_sidekiq
       %Q{
+      #{base}
       config.active_job.queue_adapter = :sidekiq
       }
     end
