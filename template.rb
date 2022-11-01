@@ -29,14 +29,14 @@ end
 # job queue
 has_resque = false
 has_sidekiq = false
-if yes?('User Resque ?')
-  has_resque = true
-  gem 'resque'
-  gem 'daemon-spawn', :require => 'daemon_spawn'
+if yes?('Use Sidekiq ?')
+  has_sidekiq = true
+  gem 'sidekiq'
 else
-  if yes?('Use Sidekiq ?')
-    has_sidekiq = true
-    gem 'sidekiq'
+  if yes?('User Resque ?')
+    has_resque = true
+    gem 'resque'
+    gem 'daemon-spawn', :require => 'daemon_spawn'
   end
 end
 
