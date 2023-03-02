@@ -33,7 +33,7 @@ if yes?('Use Sidekiq ?')
   has_sidekiq = true
   gem 'sidekiq'
 else
-  if yes?('User Resque ?')
+  if yes?('Use Resque ?')
     has_resque = true
     gem 'resque'
     gem 'daemon-spawn', :require => 'daemon_spawn'
