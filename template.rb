@@ -112,6 +112,7 @@ after_bundle do
     config.i18n.default_locale = :ja
     config.active_model.i18n_customize_full_message = true
     config.log_formatter = ::Logger::Formatter.new
+    config.active_record.schema_format = :sql
     }
     if has_resque
       %Q{
